@@ -1,76 +1,65 @@
 package core;
 
-public class Stack implements IStack {
+import java.util.ArrayList;
 
-	public Object arr[];
-	public int size;
-	public int top;
-	
-	public Stack(int size) {
-		this.size = size;
-		arr = new Object[size];
-		top = -1;
-	}
-	
-	@Override
-	public boolean isEmpty() {
-		if (top == -1) {
-			System.out.println("Stack is Empty");
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public boolean isFull() {
-		if (top >= size-1) {
-			System.out.println("Stack is FULL!");
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public int getSize() {
-		return size;
-	}
-	
+public class Stack implements IStack {
+    private ArrayList<Object> stack;
+    private int capacity;
+
+    public Stack(int initialCapacity) {
+        this.stack = new ArrayList<>(initialCapacity);
+        this.capacity = initialCapacity;
+    }
+
+    @Override
+    public boolean push(Object elm) throws PushToFullStackException {
+        if (stack.size() >= capacity) {
+            throw new PushToFullStackException("Stack is full");
+        }
+        return stack.add(elm);
+    }
+
+    @Override
+    public Object pop() {
+        if (stack.isEmpty()) {
+            return null;
+        }
+        return stack.remove(stack.size() - 1);
+    }
+
+    @Override
+    public void setCapacity(int initialCapacity) {
+        this.capacity = initialCapacity;
+    }
+
+    @Override
+    public Object top() {
+        if (stack.isEmpty()) {
+            return null;
+        }
+        return stack.get(stack.size() - 1);
+    }
+
+    @Override
+    public int getSize() {
+        return stack.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
+
 	@Override
 	public Object getTop() {
-		if(isEmpty()) {
-			System.out.println("Stack is Empty");
-            return -1;
-        }
-        else {
-        	return arr[top];
-        }
-	}
-	
-	@Override
-	public void push(int x) {
-		try {
-			top++;
-			arr[top] = x;
-		} catch (Exception e) {
-			throw new IndexOutOfBoundsException(e.getMessage());
-		}
-	}
-	
-	@Override
-	public void pop() {
-		if (top == -1) {
-			System.out.println("Stack is Empty");
-			return;
-		}
-		
-		top--;
-	}
-	
-	@Override
-	public void delete() {
-		for (int i=0; i<top; i++) {
-			arr[i] = null;
-		}
+	    if (stack.isEmpty()) {
+	        return null;
+	    }
+	    return stack.get(stack.size() - 1);
 	}
 
+	@Override
+	public void delete() {
+	    stack.clear();
+	}
 }
